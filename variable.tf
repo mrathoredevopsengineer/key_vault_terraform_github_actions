@@ -7,6 +7,3 @@ variable "location" {
   default = "Central India"
 }
 
-variable "project_name" {
-  type = string
-}
