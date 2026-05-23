@@ -1,9 +1,10 @@
 name: Terraform Infra Deploy
+
 on:
   workflow_dispatch:
 
 permissions:
-  id-token: write     # 🔥 required for OIDC
+  id-token: write
   contents: read
 
 jobs:
@@ -11,11 +12,10 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    # 1️⃣ Checkout code
+
     - name: Checkout
       uses: actions/checkout@v4
 
-    # 2️⃣ Azure Login (OIDC)
     - name: Azure Login
       uses: azure/login@v2
       with:
@@ -23,30 +23,17 @@ jobs:
         tenant-id: ${{ secrets.AZURE_TENANT_ID }}
         subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
 
-    # 3️⃣ Setup Terraform
     - name: Setup Terraform
       uses: hashicorp/setup-terraform@v3
 
-    # 4️⃣ Terraform Init
     - name: Terraform Init
       run: terraform init
 
-    # 5️⃣ Terraform Validate
     - name: Terraform Validate
       run: terraform validate
 
-    # 6️⃣ Terraform Plan
     - name: Terraform Plan
-      run: |
-        terraform plan \
-        -var="tenant_id=${{ secrets.AZURE_TENANT_ID }}" \
-        -var="subscription_id=${{ secrets.AZURE_SUBSCRIPTION_ID }}" \
-        -var="project_name=demo"
+      run: terraform plan 
 
-    # 7️⃣ Terraform Apply (only on main push)
     - name: Terraform Apply
-      run: |
-        terraform apply -auto-approve \
-        -var="tenant_id=${{ secrets.AZURE_TENANT_ID }}" \
-        -var="subscription_id=${{ secrets.AZURE_SUBSCRIPTION_ID }}" \
-        -var="project_name=demo"
+      run: terraform apply -auto-approve 
