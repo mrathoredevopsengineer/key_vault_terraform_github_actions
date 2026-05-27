@@ -2,6 +2,15 @@ name: Terraform Infra Deploy
 
 on:
   workflow_dispatch:
+    inputs:
+      action:
+        description: 'Action to perform'
+        required: true
+        type: choice
+        options:
+          - Terraform Init
+          - Terraform Plan
+          - Terraform Apply
 
 permissions:
   id-token: write
