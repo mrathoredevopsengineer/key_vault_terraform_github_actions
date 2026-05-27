@@ -9,7 +9,8 @@ on:
         type: choice
         options:
           - Terraform Init
-          - Terraform Plan
+          - Terraform Plan 
+          - Terraform Init and Plan
           - Terraform Apply
 
 permissions:
