@@ -8,10 +8,10 @@ on:
         required: true
         type: choice
         options:
-          - Terraform Init
-          - Terraform Plan 
-          - Terraform Init and Plan
-          - Terraform Apply
+          - init
+          - init-plan
+          - plan
+          - apply
 
 permissions:
   id-token: write
@@ -36,16 +36,35 @@ jobs:
     - name: Setup Terraform
       uses: hashicorp/setup-terraform@v3
 
+    # INIT ONLY
     - name: Terraform Init
+      if: github.event.inputs.action == 'init'
       run: |
         terraform init \
         -backend-config="env/kv.tfbackend"
 
-    - name: Terraform Validate
-      run: terraform validate
+    # INIT + PLAN
+    - name: Terraform Init Plan
+      if: github.event.inputs.action == 'init-plan'
+      run: |
+        terraform init \
+        -backend-config="env/kv.tfbackend"
 
+        terraform validate
+
+        terraform plan \
+        -var-file="env/terraform.tfvars"
+
+    # PLAN ONLY
     - name: Terraform Plan
-      run: terraform plan -var-file="env/terraform.tfvars"
+      if: github.event.inputs.action == 'plan'
+      run: |
+        terraform plan \
+        -var-file="env/terraform.tfvars"
 
+    # APPLY
     - name: Terraform Apply
-      run: terraform apply -auto-approve -var-file="env/terraform.tfvars"
+      if: github.event.inputs.action == 'apply'
+      run: |
+        terraform apply -auto-approve \
+        -var-file="env/terraform.tfvars"
