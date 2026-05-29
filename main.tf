@@ -42,10 +42,11 @@ resource "azurerm_mssql_server" "sqlserver" {
 # =========================
 
 resource "azurerm_mssql_database" "sqldb" {
+  depends_on = [azurerm_mssql_server.sqlserver]
 
   name      = "${local.resource_prefix}-db"
 
-  server_id = azurerm_mssql_server.sqlserver[0].id
+  server_id = azurerm_mssql_server.sqlserver.id
 
   sku_name  = "Basic"
 
