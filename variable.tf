@@ -7,9 +7,6 @@ variable "location" {
   default = "Central India"
 }
 
-variable "resource_type" {
-  type = string
-}
 
 variable "sql_admin_username" {
   type = string
