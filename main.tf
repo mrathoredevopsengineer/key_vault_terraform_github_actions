@@ -24,8 +24,6 @@ resource "azurerm_key_vault" "kv" {
 
 resource "azurerm_mssql_server" "sqlserver" {
 
-  count = var.resource_type == "sqldb" ? 1 : 0
-
   name                         = "${local.resource_prefix}-sqlserver"
   resource_group_name          = azurerm_resource_group.rg.name
   location                     = azurerm_resource_group.rg.location
@@ -44,8 +42,6 @@ resource "azurerm_mssql_server" "sqlserver" {
 # =========================
 
 resource "azurerm_mssql_database" "sqldb" {
-
-  count = var.resource_type == "sqldb" ? 1 : 0
 
   name      = "${local.resource_prefix}-db"
 
