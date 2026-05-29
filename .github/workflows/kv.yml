@@ -17,6 +17,7 @@ on:
         type: choice
         options:
           - init
+          - init-plan
           - plan
           - apply
 
