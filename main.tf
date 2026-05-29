@@ -17,3 +17,41 @@ resource "azurerm_key_vault" "kv" {
 
   tags = local.common_tags
 }
+
+# =========================
+# SQL SERVER
+# =========================
+
+resource "azurerm_mssql_server" "sqlserver" {
+
+  count = var.resource_type == "sqldb" ? 1 : 0
+
+  name                         = "${local.resource_prefix}-sqlserver"
+  resource_group_name          = azurerm_resource_group.rg.name
+  location                     = azurerm_resource_group.rg.location
+  version                      = "12.0"
+
+  administrator_login          = var.sql_admin_username
+  administrator_login_password = var.sql_admin_password
+
+  minimum_tls_version = "1.2"
+
+  tags = local.common_tags
+}
+
+# =========================
+# SQL DATABASE
+# =========================
+
+resource "azurerm_mssql_database" "sqldb" {
+
+  count = var.resource_type == "sqldb" ? 1 : 0
+
+  name      = "${local.resource_prefix}-db"
+
+  server_id = azurerm_mssql_server.sqlserver[0].id
+
+  sku_name  = "Basic"
+
+  tags = local.common_tags
+}
