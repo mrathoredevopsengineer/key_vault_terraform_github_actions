@@ -3,13 +3,6 @@ name: Terraform Infra Deploy
 on:
   workflow_dispatch:
     inputs:
-      resource:
-        description: 'Azure resources  to deploy'
-        required: true
-        type: choice
-        options:
-          - keyvault
-          - sqldb
 
       action:
         description: 'Action to perform'
